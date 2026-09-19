@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Games & Interactive Demos | Rishabh One Developer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #0d0f17;
+            color: #94a3b8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Gamer Reticle Cursor (Enlarged 32px Crisp Scale) */
+        body {
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Ccircle cx='16' cy='16' r='8' stroke='%2306b6d4' stroke-width='2' fill='%2306b6d4' fill-opacity='0.2'/%3E%3Cpath d='M16 2v6M16 24v6M2 16h6M24 16h6' stroke='%2306b6d4' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23ffffff'/%3E%3C/svg%3E") 16 16, auto;
+        }
+
+        /* Hover State Cursor (Target Lock Expanded Scale) */
+        a,
+        button,
+        [role="button"],
+        input,
+        .zoomable-thumb {
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Ccircle cx='16' cy='16' r='11' stroke='%2322d3ee' stroke-width='2' stroke-dasharray='3 3' fill='%2306b6d4' fill-opacity='0.25'/%3E%3Cpath d='M16 3v4M16 25v4M3 16h4M25 16h4' stroke='%23ffffff' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%2322d3ee'/%3E%3C/svg%3E") 16 16, pointer;
+        }
+
+        .neon-border {
+            border: 1px solid #1e293b;
+            transition: all 0.3s ease;
+        }
+
+        .neon-border:hover {
+            border-color: #06b6d4;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .accent-text {
+            color: #06b6d4;
+        }
+
+        .nav-scroll, .custom-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: thin;
+            scrollbar-color: #06b6d4 #0d0f17;
+        }
+        .nav-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .custom-scroll::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #090b10;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: #06b6d4;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col antialiased relative">
+
+    <!-- Unified Header / Navbar -->
+    <header class="bg-[#131722] border-b border-gray-800 sticky top-0 z-40">
+        <!-- Row 1: Logo + All Working Page Links -->
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-y-2">
+            <a href="index.html"
+                class="text-lg sm:text-xl font-bold tracking-wider text-white flex items-center gap-2 shrink-0">
+                <i class="fa-solid fa-gamepad accent-text text-xl sm:text-2xl"></i> Rishabh One Developer
+            </a>
+            <nav
+                class="flex flex-wrap items-center gap-x-4 sm:gap-x-6 gap-y-1 text-xs sm:text-sm font-medium overflow-x-auto nav-scroll whitespace-nowrap">
+                <a href="index.html" class="hover:text-cyan-400 transition-colors">Home</a>
+                <a href="games.html#scroll-to-games" class="hover:text-cyan-400 transition-colors text-cyan-400 font-semibold">Games</a>
+                <a href="scripts.html" class="hover:text-cyan-400 transition-colors">C# Scripts</a>
+                <a href="index.html#assets" class="hover:text-cyan-400 transition-colors">Unity Assets</a>
+                <a href="privacy.html" class="hover:text-cyan-400 transition-colors">Privacy</a>
+            </nav>
+        </div>
+
+        <!-- Row 2: FPS Bar (Strictly Right Aligned) -->
+        <div class="max-w-6xl mx-auto px-4 pb-2.5 flex justify-end">
+            <div
+                class="inline-flex items-center gap-2 bg-[#090b10] border border-cyan-500/40 px-3 py-1 rounded-md text-xs font-mono shadow-[0_0_10px_rgba(6,182,212,0.2)]">
+                <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-gray-400">FPS:</span>
+                <span id="fps-val" class="text-cyan-400 font-bold">60</span>
+            </div>
+        </div>
+    </header>
+
+    <div id="scroll-to-games"></div>
+
+    <!-- Top Safe Ad Placement -->
+    <div class="max-w-4xl mx-auto w-full my-4 sm:my-6 px-4">
+        <div class="p-4 bg-[#161b26] border border-dashed border-gray-700 text-center rounded-lg">
+            <p class="text-[11px] text-gray-500 uppercase tracking-widest mb-1 font-mono">Sponsored Advertisement</p>
+            <div class="h-20 sm:h-24 flex items-center justify-center text-gray-600 text-xs sm:text-sm font-mono">
+                [ Google Responsive Ad Banner (728x90) ]
+            </div>
+        </div>
+    </div>
+
+    <!-- Title Section -->
+    <section class="max-w-4xl mx-auto text-center py-6 sm:py-8 px-4">
+        <span
+            class="bg-cyan-950 text-cyan-400 text-xs px-3 py-1 rounded-full border border-cyan-700 uppercase tracking-wide">Official
+            Titles</span>
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-white mt-3 mb-3">Published Indie Games & Prototypes</h1>
+        <p class="text-xs sm:text-sm text-gray-400 max-w-xl mx-auto">Explore completed titles and early playable demos
+            published across Steam, Play Store, and itch.io.</p>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="max-w-5xl mx-auto px-4 flex-grow w-full space-y-12">
+
+        <!-- Game Card 1: Space Roller 3D -->
+        <article class="bg-[#131722] p-6 rounded-xl neon-border border border-gray-800 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Banner Image -->
+                <div
+                    class="h-48 md:h-full bg-[#0a0c12] border border-gray-800 rounded-lg flex flex-col items-center justify-center text-gray-500 font-mono text-xs text-center p-4">
+                    <img src="Images/space-roller-3d-square.png" alt="Space Roller 3D Cover" class="w-36 rounded-lg object-contain">
+                </div>
+
+                <!-- Game Details -->
+                <div class="md:col-span-2 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h2 class="text-xl sm:text-2xl font-bold text-white">Space Roller 3D</h2>
+                        <span
+                            class="bg-emerald-950 text-emerald-400 border border-emerald-800 text-[11px] px-2.5 py-0.5 rounded font-mono">Status:
+                            Released</span>
+                    </div>
+
+                    <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                        An arcade game where you control a ball rolling through a road filled with obstacles. The game features a simple touch control system and endless gameplay. Keep growing your score by collecting coins and avoiding obstacles.
+                    </p>
+
+                    <!-- Technical Specs Table -->
+                    <div
+                        class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-mono text-gray-400 bg-[#090b10] p-3 rounded-lg border border-gray-800">
+                        <div><span class="text-gray-600 block">Engine:</span> Unity 6</div>
+                        <div><span class="text-gray-600 block">Genre:</span> Arcade / Parkour</div>
+                        <div><span class="text-gray-600 block">Platform:</span> Android (APK)</div>
+                    </div>
+
+                    <!-- Action Buttons Row -->
+                    <div class="flex flex-wrap items-center gap-3 pt-2">
+                        <a href="https://rishabhonedeveloper.itch.io/space-roller-3d-endless-speed-obstacle-challenge" target="_blank" rel="noopener noreferrer"
+                            class="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg flex items-center gap-2 transition-colors">
+                            <i class="fa-brands fa-itch-io"></i> Download from Itch.io
+                        </a>
+                        
+                        <!-- About This Game Button (Opens Details Modal) -->
+                        <a onclick="openGameModal('space-roller')"
+                            class="px-4 py-2 bg-[#090b10] border border-cyan-500/60 hover:border-cyan-400 hover:bg-cyan-950/40 text-cyan-400 text-xs font-semibold rounded-lg flex items-center gap-2 transition-all">
+                            <i class="fa-solid fa-circle-info"></i> About This Game
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Mid-Page Safe Ad Placement -->
+        <div class="max-w-4xl mx-auto w-full my-4 px-2">
+            <div class="p-4 bg-[#161b26] border border-dashed border-gray-700 text-center rounded-lg">
+                <p class="text-[11px] text-gray-500 uppercase tracking-widest mb-1 font-mono">Sponsored Advertisement
+                </p>
+                <div class="h-20 sm:h-24 flex items-center justify-center text-gray-600 text-xs font-mono">
+                    [ Google AdSense In-Article Responsive Unit ]
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Card 2: Void Dungeon Crawler -->
+        <article class="bg-[#131722] p-6 rounded-xl neon-border border border-gray-800 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Banner Image Placeholder -->
+                <div
+                    class="h-48 md:h-full bg-[#0a0c12] border border-gray-800 rounded-lg flex flex-col items-center justify-center text-gray-500 font-mono text-xs text-center p-4">
+                    <i class="fa-solid fa-dungeon text-3xl mb-2 text-gray-700"></i>
+                    <span>Void Dungeon<br>(Web Demo Art)</span>
+                </div>
+
+                <!-- Game Details -->
+                <div class="md:col-span-2 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h2 class="text-xl sm:text-2xl font-bold text-white">THE - The Haunted Escape</h2>
+                        <span
+                            class="bg-amber-950 text-amber-400 border border-amber-800 text-[11px] px-2.5 py-0.5 rounded font-mono">Status:
+                            WebGL Demo</span>
+                    </div>
+
+                    <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                        A full dark environment based psychological horror game with bodycam perspective, dynamic lighting, and AI-driven enemy encounters.
+                    </p>
+
+                    <!-- Technical Specs Table -->
+                    <div
+                        class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-mono text-gray-400 bg-[#090b10] p-3 rounded-lg border border-gray-800">
+                        <div><span class="text-gray-600 block">Engine:</span> Unity 2023 URP</div>
+                        <div><span class="text-gray-600 block">Genre:</span> Top-Down Roguelite</div>
+                        <div><span class="text-gray-600 block">Format:</span> WebGL / HTML5</div>
+                    </div>
+
+                    <!-- Action Buttons Row -->
+                    <div class="flex flex-wrap items-center gap-3 pt-2">
+                        <a href="https://itch.io" target="_blank" rel="noopener noreferrer"
+                            class="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg flex items-center gap-2 transition-colors">
+                            <i class="fa-solid fa-play"></i> Play Web Demo (Itch.io)
+                        </a>
+
+                        <!-- About This Game Button -->
+                        <a onclick="openGameModal('void-dungeon')"
+                            class="px-4 py-2 bg-[#090b10] border border-cyan-500/60 hover:border-cyan-400 hover:bg-cyan-950/40 text-cyan-400 text-xs font-semibold rounded-lg flex items-center gap-2 transition-all">
+                            <i class="fa-solid fa-circle-info"></i> About This Game
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- Unified Footer -->
+    <footer
+        class="bg-[#0b0d13] border-t border-gray-800 py-8 text-center text-xs text-gray-400 mt-12 sm:mt-16 px-4 space-y-4">
+        <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-xs">
+            <a href="index.html" class="hover:text-cyan-400 transition-colors">Home</a>
+            <span>•</span>
+            <a href="games.html#scroll-to-games" class="hover:text-cyan-400 transition-colors">Games Directory</a>
+            <span>•</span>
+            <a href="scripts.html" class="hover:text-cyan-400 transition-colors">Unity C# Scripts</a>
+            <span>•</span>
+            <a href="privacy.html" class="hover:text-cyan-400 transition-colors">Privacy Policy</a>
+        </div>
+        <p class="text-gray-600 font-mono text-[11px]">
+            &copy; 2026 Rishabh One Developer. All rights reserved. Unity is a trademark of Unity Technologies.
+        </p>
+    </footer>
+
+    <!-- Center Game Details Modal Popup (Left Text + 90deg Divider + Right Vertical Screenshots) -->
+    <div id="gameModal"
+        class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-5">
+        <div
+            class="relative w-full max-w-5xl bg-[#080a0f] border-2 border-cyan-500 rounded-xl shadow-[0_0_25px_rgba(6,182,212,0.4)] flex flex-col max-h-[90vh] overflow-hidden">
+
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-800 bg-[#0f131d]">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-gamepad text-cyan-400 text-base"></i>
+                    <span id="modalGameTitle" class="text-sm sm:text-base font-bold text-white font-mono">Game Title</span>
+                </div>
+                <!-- Close Button (Cross) -->
+                <a onclick="closeGameModal()" class="text-gray-400 hover:text-cyan-400 text-xl p-1 transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </a>
+            </div>
+
+            <!-- Modal Body: Left Info + Vertical 90deg Divider + Right Vertical Screenshots -->
+            <div class="p-5 overflow-y-auto flex-grow grid grid-cols-1 lg:grid-cols-12 gap-6 custom-scroll">
+                
+                <!-- Left Side: Text Details (7 Columns) -->
+                <div class="lg:col-span-7 space-y-5 text-xs sm:text-sm text-gray-300 lg:pr-3">
+                    <div>
+                        <h3 class="text-cyan-400 font-bold font-mono uppercase text-xs tracking-wider mb-1.5 flex items-center gap-2">
+                            <i class="fa-solid fa-align-left"></i> Game Overview
+                        </h3>
+                        <p id="modalGameDesc" class="leading-relaxed text-gray-300"></p>
+                    </div>
+
+                    <div class="bg-[#0e121b] p-3.5 rounded-lg border border-gray-800">
+                        <h3 class="text-cyan-400 font-bold font-mono uppercase text-xs tracking-wider mb-1.5 flex items-center gap-2">
+                            <i class="fa-solid fa-download"></i> Installation & Setup Guide
+                        </h3>
+                        <div id="modalInstallGuide" class="text-gray-300 space-y-1"></div>
+                    </div>
+
+                    <div class="bg-[#0e121b] p-3.5 rounded-lg border border-gray-800">
+                        <h3 class="text-cyan-400 font-bold font-mono uppercase text-xs tracking-wider mb-1.5 flex items-center gap-2">
+                            <i class="fa-solid fa-gamepad"></i> How to Play & Controls
+                        </h3>
+                        <div id="modalPlayGuide" class="text-gray-300 space-y-1"></div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Screenshots Aligned Vertically (90deg Column) with Dedicated Scroll (5 Columns) -->
+                <div class="lg:col-span-5 space-y-2 lg:border-l lg:border-gray-800/80 lg:pl-5">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-cyan-400 font-bold font-mono uppercase text-xs tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-images"></i> Screenshots Gallery
+                        </h3>
+                        <span class="text-[10px] text-gray-500 font-mono">Click to zoom</span>
+                    </div>
+                    
+                    <!-- Vertical Stack Container (Handles Infinite Screenshots in 16:9 or Square) -->
+                    <div id="modalScreenshotsStrip" class="flex flex-col gap-3 py-1 overflow-y-auto max-h-[60vh] custom-scroll pr-1">
+                        <!-- Screenshots dynamically populated here -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="flex justify-between items-center px-5 py-3 border-t border-gray-800 bg-[#0f131d]">
+                <span class="text-[11px] font-mono text-gray-500">Official Release • Rishabh One Developer</span>
+                <a onclick="closeGameModal()" class="px-4 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-semibold rounded border border-gray-700 transition-colors">
+                    Close
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Image Zoom Lightbox Modal (Click-to-Enlarge Full Picture) -->
+    <div id="imageZoomModal"
+        class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md hidden flex items-center justify-center p-4 select-none">
+        
+        <!-- Top Controls -->
+        <div class="absolute top-4 right-4 flex items-center gap-3 z-50">
+            <span class="text-xs text-gray-400 font-mono bg-black/60 px-3 py-1 rounded border border-gray-800">Click anywhere or Esc to close</span>
+            <a onclick="closeImageZoom()" class="text-gray-300 hover:text-cyan-400 text-2xl px-2 transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </a>
+        </div>
+
+        <!-- Fullscreen Image Wrapper -->
+        <div class="relative max-w-5xl max-h-[90vh] flex items-center justify-center">
+            <img id="zoomTargetImage" src="" alt="Zoomed Screenshot"
+                class="max-h-[85vh] max-w-[90vw] object-contain rounded-lg border border-cyan-500/50 shadow-[0_0_35px_rgba(6,182,212,0.3)]">
+        </div>
+    </div>
+
+    <!-- Accurate FPS & Dynamic Game Modal Script -->
+    <script>
+        // Game Database for Modal (Add as many screenshots as you want in 16:9, square, or portrait)
+        const gameData = {
+            'space-roller': {
+                title: 'Space Roller 3D',
+                desc: 'Space Roller 3D is a fast-paced infinite speed runner where you navigate a rolling orb through endless obstacle courses in deep space. Collect coins, dodge rotating barriers, and achieve the highest scores with precise physics-based momentum.',
+                install: [
+                    '1. Download the official APK file from the itch.io page.',
+                    '2. Open your Android file manager and locate the downloaded file.',
+                    '3. Enable "Install from unknown sources" if prompted by Android security.',
+                    '4. Tap Install and launch directly from your app drawer.'
+                ],
+                controls: [
+                    '• Touch / Drag Left & Right: Steer the rolling ball.',
+                    '• Collect Yellow Coins: Increase total run points.',
+                    '• Avoid Red Laser Barriers: Collisions cause instant game over.'
+                ],
+                screenshots: [
+                    'Images/space-roller-3d-square.png'
+                    // Aur bhi 16:9 ya square screenshots ke paths yaha comma laga kar add kar sakte hain
+                ]
+            },
+            'void-dungeon': {
+                title: 'Void Dungeon Crawler',
+                desc: 'Procedural dungeon exploration roguelite built in Unity 2023. Features dynamic post-processing lighting, melee swing hit-stops, and reactive enemy AI routines designed for instant browser play.',
+                install: [
+                    '1. No download required for the WebGL version.',
+                    '2. Click "Play Web Demo" to open the browser player.',
+                    '3. Use hardware-accelerated Chrome, Edge, or Firefox for 60 FPS performance.'
+                ],
+                controls: [
+                    '• WASD / Arrow Keys: Character Movement.',
+                    '• Left Click: Weapon Attack / Combo.',
+                    '• Spacebar: Dash / Dodge Roll.'
+                ],
+                screenshots: [
+                    // Yahan aap screenshots ke paths add kar sakte hain
+                ]
+            }
+        };
+
+        function openGameModal(gameKey) {
+            const data = gameData[gameKey];
+            if (!data) return;
+
+            document.getElementById('modalGameTitle').innerText = data.title;
+            document.getElementById('modalGameDesc').innerText = data.desc;
+
+            // Installation Steps
+            const installContainer = document.getElementById('modalInstallGuide');
+            installContainer.innerHTML = data.install.map(step => `<p>${step}</p>`).join('');
+
+            // Controls
+            const playContainer = document.getElementById('modalPlayGuide');
+            playContainer.innerHTML = data.controls.map(item => `<p>${item}</p>`).join('');
+
+            // Screenshots Vertically Mapped (90-degree column) with Zoom trigger
+            const screenshotContainer = document.getElementById('modalScreenshotsStrip');
+            if (data.screenshots.length > 0) {
+                screenshotContainer.innerHTML = data.screenshots.map(src => `
+                    <div class="relative group rounded-lg overflow-hidden border border-gray-800 hover:border-cyan-400/80 transition-all bg-[#090b10] flex items-center justify-center p-1">
+                        <img src="${src}" alt="Screenshot" 
+                            onclick="openImageZoom('${src}')" 
+                            class="zoomable-thumb w-full h-auto max-h-56 object-contain rounded transition-transform duration-300 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-cyan-950/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none flex items-center justify-center">
+                            <span class="bg-black/75 text-cyan-400 text-[11px] font-mono px-2 py-1 rounded border border-cyan-500/40">
+                                <i class="fa-solid fa-magnifying-glass-plus"></i> Zoom
+                            </span>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                screenshotContainer.innerHTML = `<div class="h-40 bg-[#05070a] border border-dashed border-gray-800 rounded-lg flex items-center justify-center text-gray-600 font-mono text-xs text-center p-4">Screenshots Coming Soon</div>`;
+            }
+
+            document.getElementById('gameModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeGameModal() {
+            document.getElementById('gameModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Image Zoom Modal Functions
+        function openImageZoom(imgSrc) {
+            const zoomModal = document.getElementById('imageZoomModal');
+            const target = document.getElementById('zoomTargetImage');
+            target.src = imgSrc;
+            zoomModal.classList.remove('hidden');
+        }
+
+        function closeImageZoom() {
+            const zoomModal = document.getElementById('imageZoomModal');
+            zoomModal.classList.add('hidden');
+            document.getElementById('zoomTargetImage').src = '';
+        }
+
+        // Close Zoom Lightbox when clicking outside picture
+        document.getElementById('imageZoomModal').addEventListener('click', function (e) {
+            if (e.target !== document.getElementById('zoomTargetImage')) {
+                closeImageZoom();
+            }
+        });
+
+        // Close on backdrop click for game modal
+        window.addEventListener('click', function (e) {
+            const modal = document.getElementById('gameModal');
+            if (e.target === modal) {
+                closeGameModal();
+            }
+        });
+
+        // Close on ESC key (Closes Zoom first if open, else closes Game Modal)
+        window.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                const zoomModal = document.getElementById('imageZoomModal');
+                if (!zoomModal.classList.contains('hidden')) {
+                    closeImageZoom();
+                } else {
+                    closeGameModal();
+                }
+            }
+        });
+
+        // Live FPS Meter Engine
+        const fpsDisplay = document.getElementById('fps-val');
+        let frameTimes = [];
+
+        function renderFPS(now) {
+            while (frameTimes.length > 0 && frameTimes[0] <= now - 1000) {
+                frameTimes.shift();
+            }
+            frameTimes.push(now);
+
+            const currentFPS = frameTimes.length;
+            fpsDisplay.innerText = currentFPS;
+
+            if (currentFPS >= 50) {
+                fpsDisplay.className = "text-cyan-400 font-bold";
+            } else if (currentFPS >= 30) {
+                fpsDisplay.className = "text-amber-400 font-bold";
+            } else {
+                fpsDisplay.className = "text-rose-500 font-bold";
+            }
+
+            requestAnimationFrame(renderFPS);
+        }
+        requestAnimationFrame(renderFPS);
+    </script>
+</body>
+
+</html>
